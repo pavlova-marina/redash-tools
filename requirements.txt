@@ -1,0 +1,11 @@
+keyring
+python-dotenv
+requests
+
+#test dependencies
+
+pytest
+pytest-mock
+requests-mock
+coverage
+pytest-cov

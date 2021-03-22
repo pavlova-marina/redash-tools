@@ -1,0 +1,35 @@
+### Python ###
+
+venv
+env
+
+.env
+.tox
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Spyder & IDEA project settings
+.spyproject
+.idea
+
+# Distribution / packaging
+*.egg-info
+build
+dist
+
+# Test coverage
+.coverage
+coverage
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
