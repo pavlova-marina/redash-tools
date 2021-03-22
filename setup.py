@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='redash_tools',
-      version='0.0.15',
+      version='1.0.0',
       description='Tools to backup, batch update, template redash queries and dashboards',
       url='http://github.com/pavlova-marina/redash_tools',
       author='Marina Pavlova',
