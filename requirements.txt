@@ -1,5 +1,3 @@
-keyring
-python-dotenv
 requests
 
 #test dependencies

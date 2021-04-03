@@ -125,7 +125,6 @@ class Query(Taggable):
         self.visualizations.sort(key=lambda v: v.sort_func())
         self.options = options or {}
 
-
     def match(self, other):
         return self.data_source_id == other.data_source_id and self.query == other.query
 
@@ -142,9 +141,16 @@ class Query(Taggable):
         remote_query = Query.from_dict(super().to_redash(redash_session, try_to_update))
         self._update_query_id(remote_query.id)
         remote_query_default_vis_id = remote_query.visualizations[0].id
+        for v in remote_query.visualizations[1:]:
+            try:
+                redash_session.delete(v.make_uri())
+            except HTTPError:
+                print('exception')
+        remote_query.visualizations = [remote_query.visualizations[0]]
         visualizations = []
         for v in self.visualizations:
             visualizations.append(Visualization.from_dict(v.to_dict()))  # to avoid mutating of initial vis
+            print(visualizations)
         visualizations[0].id = remote_query_default_vis_id
         visualizations[0].query_id = remote_query.id
         remote_query.visualizations[0] = Visualization.from_dict(visualizations[0].to_redash(redash_session,
@@ -258,6 +264,30 @@ class Dashboard(Taggable):
                     w_copy.visualization_id = ids_matching.get(w_copy.visualization_id)
                 remote_db.widgets.append(Widget.from_dict(w_copy.to_redash(redash_session,
                                                                        try_to_update=True)))
+        else:
+            remote_db = Dashboard.from_dict(super().to_redash(redash_session, try_to_update=True))
+            print(remote_db.slug)
+            print(remote_db.widgets)
+            ids_matching = {}
+            for q in self.queries:
+                remote_q = q.to_redash(redash_session, try_to_update=True)
+                remote_db.queries.append(remote_q)
+                for v, remote_v in zip(q.visualizations, remote_q.visualizations):
+                    ids_matching[v.id] = remote_v.id
+            for w in remote_db.widgets:
+                try:
+                    redash_session.delete(w.make_uri())
+                except HTTPError:
+                    print('exception')
+            print(remote_db.widgets)
+            for w in self.widgets:
+                w_copy = Widget.from_dict(w.to_dict())  # to avoid mutating of initial widgets
+                w_copy.dashboard_id = remote_db.id
+                if w_copy.visualization_id is not None:
+                    w_copy.visualization_id = ids_matching.get(w_copy.visualization_id)
+                remote_db.widgets.append(Widget.from_dict(w_copy.to_redash(redash_session,
+                                                                       try_to_update=True)))
+            print(remote_db.widgets)
         return remote_db
 
 

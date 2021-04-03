@@ -5,7 +5,7 @@ import json
 import re
 from requests import HTTPError
 
-from redash_tools.core.entities import RedashEntity, Query, Dashboard
+from redash_tools.core.entities import Query, Dashboard
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,6 @@ class RedashSession:
         self.s = requests.Session()
         self.s.headers.update({'Authorization': f'Key {api_key}',
                                'Content-Type': 'application/json'})
-        print('Hola')
 
     def make_url(self, *args):
         args = list(args)
@@ -154,22 +153,22 @@ class RedashSession:
         res.raise_for_status()
         return res.json()
 
-    def delete_entity(self, entity: RedashEntity):
-        self.delete(entity.make_uri())
-
-    def delete_dashboard(self, slug: str):
-        d = self.get('dashboards', slug)
-        if d['can_edit']:
-            ans = input(f'Вы действительно хотите удалить дашборд {self.make_url("dashboard", slug)}? '
-                        'Это действие невозможно отменить. [y/n]')
-            if ans.lower() == 'y':
-                self.delete('dashboards', slug)
-            else:
-                logger.error('Операция прервана')
-                return
-        else:
-            logger.error(f'Нет прав на удаление дашборда {self.make_url("dashboard", slug)}')
-            return
+    # def delete_entity(self, entity: RedashEntity):
+    #     self.delete(entity.make_uri())
+    #
+    # def delete_dashboard(self, slug: str):
+    #     d = self.get('dashboards', slug)
+    #     if d['can_edit']:
+    #         ans = input(f'Вы действительно хотите удалить дашборд {self.make_url("dashboard", slug)}? '
+    #                     'Это действие невозможно отменить. [y/n]')
+    #         if ans.lower() == 'y':
+    #             self.delete('dashboards', slug)
+    #         else:
+    #             logger.error('Операция прервана')
+    #             return
+    #     else:
+    #         logger.error(f'Нет прав на удаление дашборда {self.make_url("dashboard", slug)}')
+    #         return
         
     ##########################
     # change-methods section #
