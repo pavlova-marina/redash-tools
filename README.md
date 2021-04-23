@@ -19,10 +19,10 @@
 	
 ## Установка пакета на локальный компьютер
 
-Установить пакет можно пока с GitHub (чуть позже причешу и залью на PyPI)
+Установить пакет можно с помощью pip install
 
 ```
-pip install git+https://github.com/pavlova-marina/redash-tools.git#egg=redash_tools
+pip install redash-tools
 ```
 
 После установки все имеющиеся функции и классы можно использовать в консоли Python и при создании новых скриптов.
